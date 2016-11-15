@@ -116,6 +116,12 @@
 #ifndef GTEST_INCLUDE_GTEST_GTEST_SPI_H_
 #define GTEST_INCLUDE_GTEST_GTEST_SPI_H_
 
+#ifdef _WINDOWS
+# define EXPORT __declspec(dllexport) 
+#else
+#define EXPORT
+#endif
+
 
 namespace testing {
 
@@ -141,21 +147,21 @@ class GTEST_API_ ScopedFakeTestPartResultReporter
   // by Google Test.  The 'result' parameter specifies where to report the
   // results. This reporter will only catch failures generated in the current
   // thread. DEPRECATED
-  explicit ScopedFakeTestPartResultReporter(TestPartResultArray* result);
+  EXPORT explicit ScopedFakeTestPartResultReporter(TestPartResultArray* result);
 
   // Same as above, but you can choose the interception scope of this object.
-  ScopedFakeTestPartResultReporter(InterceptMode intercept_mode,
+  EXPORT ScopedFakeTestPartResultReporter(InterceptMode intercept_mode,
                                    TestPartResultArray* result);
 
   // The d'tor restores the previous test part result reporter.
-  virtual ~ScopedFakeTestPartResultReporter();
+  EXPORT virtual ~ScopedFakeTestPartResultReporter();
 
   // Appends the TestPartResult object to the TestPartResultArray
   // received in the constructor.
   //
   // This method is from the TestPartResultReporterInterface
   // interface.
-  virtual void ReportTestPartResult(const TestPartResult& result);
+  EXPORT virtual void ReportTestPartResult(const TestPartResult& result);
  private:
   void Init();
 

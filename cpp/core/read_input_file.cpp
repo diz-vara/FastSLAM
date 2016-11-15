@@ -1,12 +1,14 @@
 #include "read_input_file.h"
 #include <fstream>
+#include <iostream>
 
-void read_input_file(const string s, MatrixXf *lm, MatrixXf *wp) 
+FastSLAM_core_API
+void read_input_file(const string s, MatrixXf *lm, MatrixXf *wp)
 {
 	using std::ifstream;
 	using std::istringstream;
 	
-	if(access(s.c_str(),R_OK) == -1) {
+	if(access(s.c_str(), 0 /*R_OK*/) == -1) {
 		std::cerr << "Unable to read input file" << s << std::endl;
 		exit(EXIT_FAILURE);
 	}

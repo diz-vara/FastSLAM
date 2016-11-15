@@ -5,10 +5,11 @@
 #include "particle.h"
 #include <vector>
 
+
 using namespace std;
 using namespace Eigen;
 
-void compute_jacobians(Particle particle, 
+FastSLAM_core_API void compute_jacobians(Particle particle,
                         vector<int> idf, 
                         MatrixXf R,
                         vector<VectorXf> &zp,

@@ -1,5 +1,7 @@
 #include "KF_cholesky_update.h"
 
+
+FastSLAM_core_API
 void KF_cholesky_update(VectorXf &x, MatrixXf &P,VectorXf v,MatrixXf R,MatrixXf H)
 {
     MatrixXf PHt = P*H.transpose();

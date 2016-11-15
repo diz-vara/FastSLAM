@@ -5,14 +5,16 @@
 #include <iostream>
 #include <vector>
 
+#include "api.h"
+
 using namespace Eigen;
 using namespace std;
 
 namespace nRandMat{
-	MatrixXf randn(int m, int n);
-	MatrixXf rand(int m, int n); 
+	FastSLAM_core_API MatrixXf randn(int m, int n);
+	FastSLAM_core_API MatrixXf rand(int m, int n);
 }
 
-void add_observation_noise(vector<VectorXf> &z, MatrixXf R, int addnoise);
+FastSLAM_core_API void add_observation_noise(vector<VectorXf> &z, MatrixXf R, int addnoise);
 
 #endif //ADD_OBSERVATION_NOISE_H

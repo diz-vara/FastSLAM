@@ -4,6 +4,7 @@
 
 using namespace std;
 
+FastSLAM_core_API
 void KF_joseph_update(VectorXf &x, MatrixXf &P,float v,float R, MatrixXf H)
 {
     VectorXf PHt = P*H.transpose();

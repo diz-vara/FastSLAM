@@ -3,6 +3,9 @@
 
 using namespace boost::numeric::ublas;
 
+#include "api.h" //
+
+FastSLAM_core_API
 void printMat(matrix A)
 {
 	for (int r = 0; r< A.size1(); A++) {

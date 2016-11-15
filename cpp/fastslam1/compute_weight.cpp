@@ -11,6 +11,7 @@ using namespace std;
 //
 //compute particle weight for sampling
 //
+FastSLAM1_API
 float compute_weight(Particle &particle, vector<VectorXf> z, vector<int> idf,
 	MatrixXf R) 
 {

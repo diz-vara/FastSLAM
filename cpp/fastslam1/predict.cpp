@@ -6,6 +6,7 @@
 
 using namespace std;
 
+FastSLAM1_API
 void predict(Particle &particle,float V,float G,Matrix2f Q, float WB,float dt, int addrandom)
 {
 	//optional: add random noise to predicted state
@@ -28,7 +29,8 @@ void predict(Particle &particle,float V,float G,Matrix2f Q, float WB,float dt, i
 	particle.setXv(xv_temp);
 }
 
-float pi_to_pi2(float ang) 
+FastSLAM1_API
+float pi_to_pi2(float ang)
 {
 	if (ang > pi) {
 		ang = ang - (2*pi);

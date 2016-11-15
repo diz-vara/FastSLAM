@@ -9,7 +9,11 @@
 using namespace Eigen;
 using namespace std;
 
+#include "api.h" //
+
+FastSLAM_core_API
 void pi_to_pi(VectorXf &angle); //takes in array of floats, returna array 
+FastSLAM_core_API
 float pi_to_pi(float ang);
 //vector<int> find1(VectorXf input);
 

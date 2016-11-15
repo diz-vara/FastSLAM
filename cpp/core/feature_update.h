@@ -13,6 +13,7 @@ using namespace Eigen;
 using namespace std;
 
 
+FastSLAM_core_API
 void feature_update(Particle &particle, vector<VectorXf> z, vector<int>idf, MatrixXf R);
 
 #endif

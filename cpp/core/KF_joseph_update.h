@@ -5,7 +5,9 @@
 
 using namespace Eigen;
 
-void KF_joseph_update(VectorXf &x,MatrixXf &P,float v,float R, MatrixXf H);
-MatrixXf make_symmetric(MatrixXf P);
+#include "api.h"
+
+FastSLAM_core_API void KF_joseph_update(VectorXf &x,MatrixXf &P,float v,float R, MatrixXf H);
+FastSLAM_core_API MatrixXf make_symmetric(MatrixXf P);
 
 #endif

@@ -3,6 +3,7 @@
 
 using namespace std;
 
+FastSLAM_core_API
 void add_control_noise(float V, float G, Matrix2f Q, int addnoise, float* VnGn) 
 {
 	if (addnoise ==1) {

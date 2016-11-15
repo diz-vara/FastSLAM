@@ -7,7 +7,9 @@
 using namespace std;
 using namespace Eigen;
 
-void data_associate_known(vector<VectorXf> z, vector<int> idz, VectorXf &table, int Nf, \
+#include "api.h"
+
+FastSLAM_core_API void data_associate_known(vector<VectorXf> z, vector<int> idz, VectorXf &table, int Nf, \
 						  vector<VectorXf> &zf, vector<int> &idf, vector<VectorXf> &zn); 
 
 #endif //DATA_ASSOCIATE_KNOWN_H

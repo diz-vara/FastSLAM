@@ -2,12 +2,15 @@
 #include <iostream>
 #include <math.h>
 
+FastSLAM_core_API
 vector<VectorXf> get_observations(VectorXf x, MatrixXf lm, vector<int> &idf, float rmax)
 {
 	get_visible_landmarks(x,lm,idf,rmax);
 	return compute_range_bearing(x,lm);	
 }
 
+
+FastSLAM_core_API
 void get_visible_landmarks(VectorXf x, MatrixXf &lm, vector<int> &idf, float rmax)
 {
 	//select set of landmarks that are visible within vehicle's 
@@ -41,6 +44,8 @@ void get_visible_landmarks(VectorXf x, MatrixXf &lm, vector<int> &idf, float rma
 	}
 }
 
+
+FastSLAM_core_API
 vector<VectorXf> compute_range_bearing(VectorXf x, MatrixXf lm) 
 {
 	vector<float> dx; 
@@ -66,6 +71,8 @@ vector<VectorXf> compute_range_bearing(VectorXf x, MatrixXf lm)
 	return z; 
 }
 
+
+FastSLAM_core_API
 vector<int> find2(vector<float> dx, vector<float> dy, float phi, float rmax)
 {
 	vector<int> index;
@@ -74,8 +81,8 @@ vector<int> find2(vector<float> dx, vector<float> dy, float phi, float rmax)
 		if ((abs(dx[j]) < rmax) && (abs(dy[j]) < rmax)
 				&& ((dx[j]* cos(phi) + dy[j]* sin(phi)) > 0.0)
 				&& (((float)pow(dx[j],2) + (float)pow(dy[j],2)) < (float)pow(rmax,2))){
-			index.push_back(j);			
-		}
+					index.push_back(j);			
+				}
 	}
 	return index;				
 }

@@ -3,6 +3,7 @@
 
 using namespace std;
 
+FastSLAM_core_API
 MatrixXf line_plot_conversion(MatrixXf lnes)
 {
 	int len = lnes.cols()*3 -1;			

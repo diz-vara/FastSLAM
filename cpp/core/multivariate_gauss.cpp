@@ -10,6 +10,7 @@ using namespace std;
 
 //output: sample set
 
+FastSLAM_core_API
 VectorXf multivariate_gauss(VectorXf x, MatrixXf P, int n) 
 {
 	int len = x.size();

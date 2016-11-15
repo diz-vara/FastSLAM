@@ -7,7 +7,8 @@
 
 using namespace std;
 
-void resample_particles(vector<Particle> &particles, int Nmin, int doresample) 
+FastSLAM_core_API
+void resample_particles(vector<Particle> &particles, int Nmin, int doresample)
 {
     int N = particles.size();
     VectorXf w(N);

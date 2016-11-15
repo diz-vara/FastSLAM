@@ -4,6 +4,7 @@
 
 using namespace std;
 
+FastSLAM_core_API
 void stratified_random(int N, vector<float> &di)
 { 
     float k = 1.0/(float)N;

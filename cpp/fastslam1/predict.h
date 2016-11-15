@@ -7,7 +7,16 @@
 
 using namespace Eigen;
 
+#if defined _WINDOWS && defined FastSLAM1_EXPORTS
+# define FastSLAM1_API __declspec(dllexport) 
+#else
+#define FastSLAM1_API
+#endif
+
+
+FastSLAM1_API
 void predict(Particle &particle,float V,float G,Matrix2f Q, float WB,float dt, int addrandom);
-float pi_to_pi2(float ang); 
+FastSLAM1_API
+float pi_to_pi2(float ang);
 
 #endif //PREDICT_H

@@ -1,7 +1,11 @@
 #include <stdio.h>
 #include <algorithm>
 #include <iterator>
-#include <unistd.h>
+#ifdef _WINDOWS
+# include <io.h>
+#else
+# include <unistd.h>
+#endif
 #include <errno.h>
 #include <string>
 #include <vector>
@@ -11,4 +15,7 @@
 using namespace Eigen;
 using namespace std;
 
-void read_input_file(const string s, MatrixXf *lm, MatrixXf *wp); 
+#include "api.h" //
+
+FastSLAM_core_API
+void read_input_file(const string s, MatrixXf *lm, MatrixXf *wp);

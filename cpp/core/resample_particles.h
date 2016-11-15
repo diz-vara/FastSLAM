@@ -9,6 +9,7 @@
 using namespace Eigen;
 using namespace std;
 
-void resample_particles(vector<Particle> &particles, int Nmin, int doresample); 
+FastSLAM_core_API
+void resample_particles(vector<Particle> &particles, int Nmin, int doresample);
 
 #endif //RESAMPLE_PARTICLES_H

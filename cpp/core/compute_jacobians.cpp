@@ -3,6 +3,7 @@
 #include "math.h"
 #include "pi_to_pi.h"
 
+FastSLAM_core_API
 void compute_jacobians(Particle particle, 
 		vector<int> idf, 
 		MatrixXf R, 

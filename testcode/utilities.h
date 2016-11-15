@@ -1,5 +1,8 @@
 #include <stdio.h>
-#include <sys/time.h>
+
+#ifndef _WINDOWS
+# include <sys/time.h>
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////
 // MyTimer
@@ -16,11 +19,16 @@ public:
   
   void Start()
   {
+#ifndef _WINDOWS
     gettimeofday(&tv1, NULL);
+#endif
   }
   double Stop()
   {
-    gettimeofday(&tv2, NULL);
+#ifdef _WINDOWS
+	  return 1.;
+#else
+	  //gettimeofday(&tv2, NULL);
     int sec = tv2.tv_sec - tv1.tv_sec;
     int usec = tv2.tv_usec - tv1.tv_usec;
     
@@ -30,11 +38,15 @@ public:
       usec = 1000000 + usec;
     }
     
-    return (double)sec + (double)usec / 1000000.0;
+	return (double)sec + (double)usec / 1000000.0;
+#endif
   }
   void Print(const char *label)
   {
-    int sec = tv2.tv_sec - tv1.tv_sec;
+#ifdef _WINDOWS
+	  puts("no timer");
+#else
+	int sec = tv2.tv_sec - tv1.tv_sec;
     int usec = tv2.tv_usec - tv1.tv_usec;
     
     if (usec < 0)
@@ -43,9 +55,12 @@ public:
       usec = 1000000 + usec;
     }
     printf("%s took %d sec %d usec\n", label, sec, usec);
+#endif
   }
   
 private:
-  struct timeval tv1, tv2;
+#ifndef _WINDOWS
+	struct timeval tv1, tv2;
+#endif
 };
 

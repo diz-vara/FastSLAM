@@ -1,7 +1,8 @@
 #include "TransformToGlobal.h"
 #include "pi_to_pi.h"
 
-void TransformToGlobal(MatrixXf &p, VectorXf b) 
+FastSLAM_core_API
+void TransformToGlobal(MatrixXf &p, VectorXf b)
 {
 	//rotate
 	MatrixXf rot(2,2);

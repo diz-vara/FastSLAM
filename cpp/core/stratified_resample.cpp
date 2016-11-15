@@ -4,6 +4,7 @@
 
 using namespace std;
 
+FastSLAM_core_API
 void stratified_resample(VectorXf w, vector<int> &keep, float &Neff)
 {
     VectorXf wsqrd(w.size());
@@ -50,15 +51,16 @@ void stratified_resample(VectorXf w, vector<int> &keep, float &Neff)
 //
 //returns a cumulative sum array
 //
-void cumsum(VectorXf &w) 
+FastSLAM_core_API
+void cumsum(VectorXf &w)
 {
     VectorXf csumVec = VectorXf(w);
 
     for (int i=0; i< w.size(); i++) {
         float sum =0;
         for (int j=0; j<=i; j++) {
-	    sum+=csumVec(j);
-	}			
-	w(i) = sum;
+			sum+=csumVec(j);
+		}			
+		w(i) = sum;
     }
 }

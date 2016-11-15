@@ -6,6 +6,9 @@
 
 using namespace Eigen;
 
+#include "api.h" //
+
+FastSLAM_core_API
 void TransformToGlobal(MatrixXf &p, VectorXf b);
 
 #endif //TRANSFORMGLOBAL_H

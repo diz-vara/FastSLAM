@@ -4,6 +4,7 @@
 using namespace std;
 
 //z is the list of measurements conditioned on the particle.
+FastSLAM_core_API
 void feature_update(Particle &particle, vector<VectorXf> z, vector<int>idf, MatrixXf R)
 {
     //Having selected a new pose from the proposal distribution, this pose is assumed perfect and each feature update maybe computed independently and without pose uncertainty

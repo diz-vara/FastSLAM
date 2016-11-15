@@ -1,7 +1,9 @@
 #include "pi_to_pi.h"
 #include <iostream>
 
-void pi_to_pi(VectorXf &angle) 
+
+FastSLAM_core_API
+void pi_to_pi(VectorXf &angle)
 {
     int n;
     for (int i=0; i<angle.size(); i++) {
@@ -19,7 +21,8 @@ void pi_to_pi(VectorXf &angle)
     }
 }
 
-float pi_to_pi(float ang) 
+FastSLAM_core_API
+float pi_to_pi(float ang)
 {
     int n;
     if ((ang < (-2*pi)) || (ang > (2*pi))) {
