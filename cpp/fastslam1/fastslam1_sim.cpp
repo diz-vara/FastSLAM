@@ -82,6 +82,7 @@ vector<Particle> fastslam1_sim(MatrixXf lm, MatrixXf wp)
     vector<VectorXf> z; //range and bearings of visible landmarks
 
     //Main loop
+	int step(0);
     while (iwp !=-1) {
 		compute_steering(xtrue, wp, iwp, AT_WAYPOINT, G, RATEG, MAXG, dt);
 		if (iwp ==-1 && NUMBER_LOOPS > 1) {
@@ -89,6 +90,8 @@ vector<Particle> fastslam1_sim(MatrixXf lm, MatrixXf wp)
 			NUMBER_LOOPS = NUMBER_LOOPS-1;
 		}
 		predict_true(xtrue,V,G,WHEELBASE,dt);
+
+		++step;
 
 		//add process noise
 		float* VnGn = new float[2];        
@@ -111,6 +114,7 @@ vector<Particle> fastslam1_sim(MatrixXf lm, MatrixXf wp)
 		//Observe step
 		dtsum = dtsum+dt;
 		if (dtsum >= DT_OBSERVE) {
+
 			dtsum=0;
 
 			//Compute true data, then add noise
@@ -119,6 +123,8 @@ vector<Particle> fastslam1_sim(MatrixXf lm, MatrixXf wp)
 			//z is the range and bearing of the observed landmark
 			z = get_observations(xtrue,lm,ftag_visible,MAX_RANGE);
 			add_observation_noise(z,R,SWITCH_SENSOR_NOISE);
+
+			cout << endl << "step: " << step << ", z.size()= " << z.size() << ", ";
 
 			if (!z.empty()){
 				plines = make_laser_lines(z,xtrue);
@@ -134,10 +140,13 @@ vector<Particle> fastslam1_sim(MatrixXf lm, MatrixXf wp)
 			data_associate_known(z,ftag_visible,da_table,Nf,zf,idf,zn);
 	    
 			//perform update
+			float sumw0(0.f), sumw1(0.f);
 			for (int i =0; i<NPARTICLES; i++) {
 				if (!zf.empty()) { //observe map features
 					float w = compute_weight(particles[i],zf,idf,R);
+					sumw0 += w;
 					w = particles[i].w()*w;
+					sumw1 += w;
 					particles[i].setW(w);
 					feature_update(particles[i],zf,idf,R);
 				}
@@ -145,6 +154,8 @@ vector<Particle> fastslam1_sim(MatrixXf lm, MatrixXf wp)
 					add_feature(particles[i], zn, R);
 				}
 			}
+
+			cout << "zf.size()=" << zf.size() << ", sumw0=" << sumw0 << ", sumw1= " << sumw1 << ", ";
 
 			resample_particles(particles,NEFFECTIVE,SWITCH_RESAMPLE);
 

@@ -19,7 +19,8 @@ void resample_particles(vector<Particle> &particles, int Nmin, int doresample)
     }
 
     float ws = w.sum();
-    assert(ws != 0);
+	cout << ", ws=" << ws;
+	assert(ws != 0);
 
     for (int i=0; i<N; i++) {
         w(i) = w(i)/ws;
