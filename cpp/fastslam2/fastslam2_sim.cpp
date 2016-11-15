@@ -20,6 +20,7 @@
 using namespace config;
 using namespace std;
 
+FastSLAM2_API
 vector<Particle> fastslam2_sim(MatrixXf lm, MatrixXf wp) 
 {
     if (SWITCH_PREDICT_NOISE) {

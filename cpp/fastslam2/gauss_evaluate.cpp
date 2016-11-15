@@ -7,6 +7,7 @@
 using namespace std; 
 
 //approximation of the desired sampling distribution. 
+FastSLAM2_API
 float gauss_evaluate(VectorXf v, MatrixXf S, int logflag) 
 {
     int D = v.size();    

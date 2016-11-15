@@ -6,6 +6,7 @@
 #include "assert.h"
 
 //compute proposal distribution, then sample from it, and compute new particle weight
+FastSLAM2_API
 void sample_proposal(Particle &particle, vector<VectorXf> z, vector<int> idf, MatrixXf R)
 {
     assert(isfinite(particle.w()));
@@ -135,6 +136,7 @@ void sample_proposal(Particle &particle, vector<VectorXf> z, vector<int> idf, Ma
     particle.setW(newW);
 } 
 
+FastSLAM2_API
 float likelihood_given_xv(Particle particle, vector<VectorXf> z, vector<int>idf, MatrixXf R) 
 {
     float w = 1;
@@ -164,6 +166,7 @@ float likelihood_given_xv(Particle particle, vector<VectorXf> z, vector<int>idf,
     return w;
 }
 
+FastSLAM2_API
 VectorXf delta_xv(VectorXf xv1, VectorXf xv2)
 {
     //compute innovation between two xv estimates, normalising the heading component

@@ -5,6 +5,14 @@
 
 using namespace Eigen;
 
+#include "core/particle.h"
+#if defined _WINDOWS && defined FastSLAM2_EXPORTS
+# define FastSLAM2_API __declspec(dllexport) 
+#else
+#define FastSLAM2_API
+#endif
+
+FastSLAM2_API
 float gauss_evaluate(VectorXf v, MatrixXf S, int logflag);
 
 /*

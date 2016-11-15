@@ -9,6 +9,7 @@
 
 using namespace std;
 
+FastSLAM2_API
 void observe_heading(Particle &particle, float phi, int useheading) 
 {
     if (useheading ==0){

@@ -8,6 +8,7 @@
 
 using namespace std;
 
+FastSLAM2_API
 void predict(Particle &particle,float V,float G,Matrix2f Q, float WB,float dt, int addrandom)
 {
 	VectorXf xv = particle.xv();
@@ -61,6 +62,7 @@ void predict(Particle &particle,float V,float G,Matrix2f Q, float WB,float dt, i
         particle.setXv(xv_temp);
 }
 
+FastSLAM2_API
 float pi_to_pi2(float ang) 
 {
     if (ang > pi) {
