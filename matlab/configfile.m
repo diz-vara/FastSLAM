@@ -10,8 +10,8 @@ WHEELBASE= 4; % metres, vehicle wheel-base
 DT_CONTROLS= 0.025; % seconds, time interval between control signals
 
 % control noises
-sigmaV= 0.3; % m/s
-sigmaG= (3.0*pi/180); % radians
+sigmaV= 0.5; % m/s
+sigmaG= (2.0*pi/180); % radians
 Q= [sigmaV^2 0; 0 sigmaG^2];
 
 % observation parameters
@@ -19,8 +19,8 @@ MAX_RANGE= 30.0; % metres
 DT_OBSERVE= 8*DT_CONTROLS; % seconds, time interval between observations
 
 % observation noises
-sigmaR= 0.1; % metres
-sigmaB= (1.0*pi/180); % radians
+sigmaR= 0.2; % metres
+sigmaB= (2.0*pi/180); % radians
 R= [sigmaR^2 0; 0 sigmaB^2];
 
 % waypoint proximity
@@ -39,6 +39,6 @@ SWITCH_PREDICT_NOISE = 0;   % sample noise from predict (usually 1 for fastslam1
 SWITCH_SAMPLE_PROPOSAL = 1; % sample from proposal (no effect on fastslam1.0 and usually 1 for fastslam2.0)
 SWITCH_HEADING_KNOWN= 0;
 SWITCH_RESAMPLE= 1; 
-SWITCH_PROFILE= 0;
+SWITCH_PROFILE= 1;
 SWITCH_SEED_RANDOM= 0; % if not 0, seed the randn() with its value at beginning of simulation (for repeatability)
 
