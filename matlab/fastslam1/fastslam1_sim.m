@@ -54,7 +54,7 @@ while iwp ~= 0
     
     % Compute true data
     [G,iwp]= compute_steering(xtrue, wp, iwp, AT_WAYPOINT, G, RATEG, MAXG, dt);
-    if iwp==0 & NUMBER_LOOPS > 1, iwp=1; NUMBER_LOOPS= NUMBER_LOOPS-1; end % path loopfs repeat
+    if iwp==0 && NUMBER_LOOPS > 1, iwp=1; NUMBER_LOOPS= NUMBER_LOOPS-1; end % path loopfs repeat
     xtrue= predict_true(xtrue, V,G, WHEELBASE,dt);
 
     % Add process noise
@@ -128,8 +128,8 @@ w = [particles.w];
 ii= find(w== max(w)); 
 xvmax= xvp(:,ii);
 
-xt= transformtoglobal(veh,xtrue);
-xm= transformtoglobal(veh,xvmax);
+xt= TransformToGlobal(veh,xtrue);
+xm= TransformToGlobal(veh,xvmax);
 set(h.xt, 'xdata', xt(1,:), 'ydata', xt(2,:))
 set(h.xm, 'xdata', xm(1,:), 'ydata', xm(2,:))
 set(h.xvp, 'xdata', xvp(1,:), 'ydata', xvp(2,:))
@@ -145,7 +145,7 @@ if isempty(rb), p=[]; return, end
 len= size(rb,2);
 lnes(1,:)= zeros(1,len)+ xv(1);
 lnes(2,:)= zeros(1,len)+ xv(2);
-lnes(3:4,:)= transformtoglobal([rb(1,:).*cos(rb(2,:)); rb(1,:).*sin(rb(2,:))], xv);
+lnes(3:4,:)= TransformToGlobal([rb(1,:).*cos(rb(2,:)); rb(1,:).*sin(rb(2,:))], xv);
 p= line_plot_conversion (lnes);
 
 function p= initialise_particles(np)
