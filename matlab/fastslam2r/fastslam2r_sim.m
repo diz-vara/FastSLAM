@@ -47,14 +47,17 @@ if SWITCH_SEED_RANDOM ~= 0, rand('state',SWITCH_SEED_RANDOM), randn('state',SWIT
 Qe= Q; Re= R;
 if SWITCH_INFLATE_NOISE==1, Qe= 2*Q; Re= 2*R; end
 
-if SWITCH_PROFILE, profile on -detail builtin, end
+if SWITCH_PROFILE, profile on, end  %
 
 % main loop 
 while iwp ~= 0 
+    x = kbhit(2);
+    if (x == 27), break; end 
+
     
     % compute true data
     [G,iwp]= compute_steering(xtrue, wp, iwp, AT_WAYPOINT, G, RATEG, MAXG, dt);
-    if iwp==0 & NUMBER_LOOPS > 1, iwp=1; NUMBER_LOOPS= NUMBER_LOOPS-1; end
+    if iwp==0 && NUMBER_LOOPS > 1, iwp=1; NUMBER_LOOPS= NUMBER_LOOPS-1; end
     xtrue= predict_true(xtrue, V,G, WHEELBASE,dt);
     
     % add process noise
@@ -74,7 +77,9 @@ while iwp ~= 0
         % Compute true data, then add noise
         [z,ftag_visible]= get_observations(xtrue, lm, ftag, MAX_RANGE);
         z= add_observation_noise(z,R, SWITCH_SENSOR_NOISE);
-        if ~isempty(z), plines= make_laser_lines (z,xtrue); end
+        if ~isempty(z), 
+          plines= make_laser_lines (z,xtrue); 
+        end
         
         % Compute (known) data associations
         Nf= size(particles(1).xf,2);
@@ -110,13 +115,13 @@ while iwp ~= 0
             end
         end
         
+      % plots
+      do_plot(h, particles, xtrue, plines, veh, z)
     end
     
-    % plots
-    do_plot(h, particles, xtrue, plines, veh)
 end
 
-if SWITCH_PROFILE, profile report, end
+%if SWITCH_PROFILE, profile report, end
 
 data= particles;
 
@@ -128,7 +133,7 @@ if isempty(rb), p=[]; return, end
 len= size(rb,2);
 lnes(1,:)= zeros(1,len)+ xv(1);
 lnes(2,:)= zeros(1,len)+ xv(2);
-lnes(3:4,:)= transformtoglobal([rb(1,:).*cos(rb(2,:)); rb(1,:).*sin(rb(2,:))], xv);
+lnes(3:4,:)= TransformToGlobal([rb(1,:).*cos(rb(2,:)); rb(1,:).*sin(rb(2,:))], xv);
 p= line_plot_conversion (lnes);
 
 function p= initialise_particles(np)
@@ -182,13 +187,14 @@ plot(wp(1,:),wp(2,:), wp(1,:),wp(2,:),'ro')
 
 h.xt= patch(0,0,'g','erasemode','xor'); % vehicle true
 h.xm= patch(0,0,'r','erasemode','xor'); % mean vehicle estimate
-h.obs= plot(0,0,'y','erasemode','xor'); % observations
+h.obs= plot(0,0,'m','erasemode','xor'); % observations
+h.obs1= plot(0,0,'y','erasemode','xor'); % observations
 h.xfp= plot(0,0,'r.','erasemode','background'); % estimated features (particle means)
 h.xvp= plot(0,0,'r.','erasemode','xor'); % estimated vehicle (particles)
 h.cov= plot(0,0,'erasemode','xor'); % covariances of max weight particle
 
 
-function do_plot(h, particles, xtrue, plines, veh)
+function do_plot(h, particles, xtrue, plines, veh,z )
 
 xvp = [particles.xv];
 xfp = [particles.xf];
@@ -196,14 +202,16 @@ w = [particles.w];
 
 ii= find(w== max(w)); 
 xvmax= xvp(:,ii);
+plines1=make_laser_lines(z,xvmax);
 
-xt= transformtoglobal(veh,xtrue);
-xm= transformtoglobal(veh,xvmax);
+xt= TransformToGlobal(veh,xtrue);
+xm= TransformToGlobal(veh,xvmax);
 set(h.xt, 'xdata', xt(1,:), 'ydata', xt(2,:))
 set(h.xm, 'xdata', xm(1,:), 'ydata', xm(2,:))
 set(h.xvp, 'xdata', xvp(1,:), 'ydata', xvp(2,:))
 if ~isempty(xfp), set(h.xfp, 'xdata', xfp(1,:), 'ydata', xfp(2,:)), end
 if ~isempty(plines), set(h.obs, 'xdata', plines(1,:), 'ydata', plines(2,:)), end
+if ~isempty(plines1), set(h.obs1, 'xdata', plines1(1,:), 'ydata', plines1(2,:)), end
 pcov= make_covariance_ellipses(particles(ii(1)));
 if ~isempty(pcov), set(h.cov, 'xdata', pcov(1,:), 'ydata', pcov(2,:)); end
 
