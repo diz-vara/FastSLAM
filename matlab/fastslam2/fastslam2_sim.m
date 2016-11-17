@@ -1,4 +1,4 @@
-function data= fastslam2_sim(lm, wp)
+function data= fastslam2_sim(lm, wp, npar)
 %function data= fastslam2_sim(lm, wp)
 %
 % INPUTS: 
@@ -25,6 +25,11 @@ format compact
 path(path, '../')
 configfile;
 
+if (nargin >= 3),
+  NPARTICLES = npar;
+end
+
+
 if SWITCH_PREDICT_NOISE, warning('Sampling from predict noise usually OFF for FastSLAM 2.0'), end
 if SWITCH_SAMPLE_PROPOSAL==0, warning('Sampling from optimal proposal is usually ON for FastSLAM 2.0'), end
 
@@ -36,7 +41,7 @@ particles= initialise_particles(NPARTICLES);
 xtrue= zeros(3,1);
 
 dt= DT_CONTROLS;    % change in time between predicts
-dtsum= 0;           % change in time since last observation
+dtsum= 100;           % change in time since last observation
 ftag= 1:size(lm,2); % identifier for each landmark
 da_table= zeros(1,size(lm,2)); % data association table 
 iwp= 1;             % index to first waypoint 
@@ -52,6 +57,8 @@ if SWITCH_PROFILE, profile on -detail builtin, end
 % Main loop 
 while iwp ~= 0 
     
+    if (kbhit(2) == 27), break; end 
+  
     % compute true data
     [G,iwp]= compute_steering(xtrue, wp, iwp, AT_WAYPOINT, G, RATEG, MAXG, dt);
     if iwp==0 && NUMBER_LOOPS > 1, iwp=1; NUMBER_LOOPS= NUMBER_LOOPS-1; end
@@ -59,7 +66,6 @@ while iwp ~= 0
     
     % add process noise
     [Vn,Gn]= add_control_noise(V,G,Q, SWITCH_CONTROL_NOISE);
-    
     % Predict step
     for i=1:NPARTICLES
         particles(i)= predict (particles(i), Vn,Gn,Qe, WHEELBASE,dt, SWITCH_PREDICT_NOISE);
@@ -95,19 +101,22 @@ while iwp ~= 0
         
         % Observe new features, augment map
         if ~isempty(zn)
+          %xv = zeros(3,NPARTICLES);
             for i=1:NPARTICLES
+              %xv(:,i) = particles(i).xv;
                 if isempty(zf) % sample from proposal distribution (if we have not already done so above)
                     particles(i).xv= multivariate_gauss(particles(i).xv, particles(i).Pv, 1);
                     particles(i).Pv= zeros(3);
                 end                        
                 particles(i)= add_feature(particles(i), zn,Re);
             end
+            %xv;
         end
         
+      % plots
+      do_plot(h, particles, xtrue, plines, veh, z)
     end
     
-    % plots
-    do_plot(h, particles, xtrue, plines, veh)
 end
 
 if SWITCH_PROFILE, profile report, end
@@ -173,19 +182,20 @@ p(1,:)= [a(1,:)+x(1) NaN];
 %don't implement this
 function h= setup_animations(lm,wp)
 figure
-plot(lm(1,:),lm(2,:),'g*')
+plot(lm(1,:),lm(2,:),'g*', 'markersize', 20)
 hold on, axis equal
 plot(wp(1,:),wp(2,:), wp(1,:),wp(2,:),'ro')
 
 h.xt= patch(0,0,'g','erasemode','xor'); % vehicle true
 h.xm= patch(0,0,'r','erasemode','xor'); % mean vehicle estimate
-h.obs= plot(0,0,'y','erasemode','xor'); % observations
+h.obs= plot(0,0,'m','erasemode','xor'); % observations
+h.obs1= plot(0,0,'c','erasemode','xor'); % observations
 h.xfp= plot(0,0,'r.','erasemode','background'); % estimated features (particle means)
 h.xvp= plot(0,0,'r.','erasemode','xor'); % estimated vehicle (particles)
-h.cov= plot(0,0,'erasemode','xor'); % covariances of max weight particle
+h.cov= plot(0,0,'b-','erasemode','xor'); % covariances of max weight particle
 
 %dont implement this
-function do_plot(h, particles, xtrue, plines, veh)
+function do_plot(h, particles, xtrue, plines, veh, z)
 
 xvp = [particles.xv];
 xfp = [particles.xf];
@@ -193,6 +203,8 @@ w = [particles.w];
 
 ii= find(w== max(w)); 
 xvmax= xvp(:,ii);
+plines1=make_laser_lines(z,xvmax);
+
 
 xt= TransformToGlobal(veh,xtrue);
 xm= TransformToGlobal(veh,xvmax);
@@ -201,6 +213,7 @@ set(h.xm, 'xdata', xm(1,:), 'ydata', xm(2,:))
 set(h.xvp, 'xdata', xvp(1,:), 'ydata', xvp(2,:))
 if ~isempty(xfp), set(h.xfp, 'xdata', xfp(1,:), 'ydata', xfp(2,:)), end
 if ~isempty(plines), set(h.obs, 'xdata', plines(1,:), 'ydata', plines(2,:)), end
+if ~isempty(plines1), set(h.obs1, 'xdata', plines1(1,:), 'ydata', plines1(2,:)), end
 pcov= make_covariance_ellipses(particles(ii(1)));
 if ~isempty(pcov), set(h.cov, 'xdata', pcov(1,:), 'ydata', pcov(2,:)); end
 
