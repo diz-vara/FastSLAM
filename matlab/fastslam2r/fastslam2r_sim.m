@@ -1,9 +1,10 @@
-function data= fastslam2_sim(lm, wp)
-%function data= fastslam2_sim(lm, wp)
+function data= fastslam2_sim(lm, wp, npar)
+%function data= fastslam2_sim(lm, wp, npar)
 %
 % INPUTS: 
 %   lm - set of landmarks
 %   wp - set of waypoints
+%   npar - number of particles
 %
 % OUTPUTS:
 %   data - set of particles representing final state
@@ -25,6 +26,14 @@ format compact
 path(path, '../')
 configfile;
 
+if (nargin >= 3),
+  NPARTICLES = npar;
+end
+
+
+
+
+
 if SWITCH_PREDICT_NOISE, warning('Sampling from predict noise usually OFF for FastSLAM 2.0'), end
 if SWITCH_SAMPLE_PROPOSAL==0, warning('Sampling from optimal proposal is usually ON for FastSLAM 2.0'), end
 
@@ -32,8 +41,8 @@ h= setup_animations(lm,wp);
 veh= [0 -WHEELBASE -WHEELBASE; 0 -1 1];
 
 % initialisations
-particles= initialise_particles(NPARTICLES);
-xtrue= zeros(3,1);
+xtrue= [rand()*100-50, rand()*100-50, rand()*2*pi()-pi()]'; %zeros(3,1);
+particles= initialise_particles(NPARTICLES, xtrue);
 
 dt= DT_CONTROLS; % change in time between predicts
 dtsum= 0; % change in time since last observation
@@ -51,8 +60,7 @@ if SWITCH_PROFILE, profile on, end  %
 
 % main loop 
 while iwp ~= 0 
-    x = kbhit(2);
-    if (x == 27), break; end 
+    if (kbhit(2) == 27), break; end 
 
     
     % compute true data
@@ -136,10 +144,10 @@ lnes(2,:)= zeros(1,len)+ xv(2);
 lnes(3:4,:)= TransformToGlobal([rb(1,:).*cos(rb(2,:)); rb(1,:).*sin(rb(2,:))], xv);
 p= line_plot_conversion (lnes);
 
-function p= initialise_particles(np)
+function p= initialise_particles(np,pos)
 for i=1:np
     p(i).w= 1/np;
-    p(i).xv= [0;0;0];
+    p(i).xv=pos; % [0;0;0];
     p(i).Pv= zeros(3);
     p(i).xf= [];
     p(i).Pf= [];
@@ -181,7 +189,7 @@ p(1,:)= [a(1,:)+x(1) NaN];
 
 function h= setup_animations(lm,wp)
 figure
-plot(lm(1,:),lm(2,:),'g*')
+plot(lm(1,:),lm(2,:),'k*', 'markersize', 10)
 hold on, axis equal
 plot(wp(1,:),wp(2,:), wp(1,:),wp(2,:),'ro')
 
