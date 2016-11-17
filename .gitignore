@@ -5,3 +5,5 @@ test/**/*
 exec
 build
 .DS_Store
+
+octave-workspace
