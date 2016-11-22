@@ -10,22 +10,22 @@ WHEELBASE= 4; % metres, vehicle wheel-base
 DT_CONTROLS= 0.025; % seconds, time interval between control signals
 
 % control noises
-sigmaV= 0.5; % m/s
+sigmaV= 2; % m/s
 sigmaG= (2.0*pi/180); % radians
 Q= [sigmaV^2 0; 0 sigmaG^2];
 
 % observation parameters
-MAX_RANGE= 30.0; % metres
-DT_OBSERVE= 2*DT_CONTROLS; % seconds, time interval between observations
+MAX_RANGE= 50.0; % metres
+DT_OBSERVE= 4*DT_CONTROLS; % seconds, time interval between observations
 
 % observation noises
-sigmaR= 5.0; % metres
-sigmaB= (5.0*pi/180); % radians
+sigmaR= 2.0; % metres
+sigmaB= (2.0*pi/180); % radians
 R= [sigmaR^2 0; 0 sigmaB^2];
 
 % waypoint proximity
 AT_WAYPOINT= 1.0; % metres, distance from current waypoint at which to switch to next waypoint
-NUMBER_LOOPS= 3; % number of loops through the waypoint list
+NUMBER_LOOPS= 2; % number of loops through the waypoint list
 
 
 % resampling

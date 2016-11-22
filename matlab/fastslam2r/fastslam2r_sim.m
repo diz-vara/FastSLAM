@@ -1,5 +1,5 @@
-function data= fastslam2_sim(lm, wp, npar)
-%function data= fastslam2_sim(lm, wp, npar)
+ function data= fastslam2r_sim(lm, wp, npar)
+%function data= fastslam2r_sim(lm, wp, npar)
 %
 % INPUTS: 
 %   lm - set of landmarks
@@ -126,8 +126,8 @@ while iwp ~= 0
       % plots
       do_plot(h, particles, xtrue, plines, veh, z)
     end
-    
 end
+   plot(lm(1,:),lm(2,:),'*','markersize', 6, 'color',[0 0.3 0] )
 
 %if SWITCH_PROFILE, profile report, end
 
@@ -189,9 +189,8 @@ p(1,:)= [a(1,:)+x(1) NaN];
 
 function h= setup_animations(lm,wp)
 figure
-plot(lm(1,:),lm(2,:),'k*', 'markersize', 10)
-hold on, axis equal
-plot(wp(1,:),wp(2,:), wp(1,:),wp(2,:),'ro')
+plot(wp(1,:),wp(2,:),'b-o')
+hold on,  axis equal; axis([-120 120 -120 120]);
 
 h.xt= patch(0,0,'g','erasemode','xor'); % vehicle true
 h.xm= patch(0,0,'r','erasemode','xor'); % mean vehicle estimate
@@ -199,7 +198,7 @@ h.obs= plot(0,0,'m','erasemode','xor'); % observations
 h.obs1= plot(0,0,'y','erasemode','xor'); % observations
 h.xfp= plot(0,0,'r.','erasemode','background'); % estimated features (particle means)
 h.xvp= plot(0,0,'r.','erasemode','xor'); % estimated vehicle (particles)
-h.cov= plot(0,0,'erasemode','xor'); % covariances of max weight particle
+h.cov= plot(0,0,'color',[0.3 0.3 0],'erasemode','xor'); % covariances of max weight particle
 
 
 function do_plot(h, particles, xtrue, plines, veh,z )
