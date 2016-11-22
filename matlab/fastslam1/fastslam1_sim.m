@@ -51,7 +51,9 @@ if SWITCH_PROFILE, profile on -detail builtin, end
 
 % Main loop 
 while iwp ~= 0
-    
+
+    if (kbhit(2) == 27), break; end 
+
     % Compute true data
     [G,iwp]= compute_steering(xtrue, wp, iwp, AT_WAYPOINT, G, RATEG, MAXG, dt);
     if iwp==0 && NUMBER_LOOPS > 1, iwp=1; NUMBER_LOOPS= NUMBER_LOOPS-1; end % path loopfs repeat
